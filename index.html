@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="hy">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Շիրազի վիկտորինա</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Armenian:wght@400;500;600&family=Noto+Serif+Armenian:wght@500;700&display=swap">
+<style>
+/* Layout: one narrow centered column; a quiet stone-toned page with a single pomegranate accent on the active question and the primary button */
+:root {
+  --bg: #ecebe8;
+  --surface: #f7f6f4;
+  --fg: #1c2030;
+  --muted: #5d6272;
+  --line: #d3d1cc;
+  --accent: #8a1f3b;
+  --on-accent: #ffffff;
+  --good-bg: #dcefe3;
+  --good-fg: #14532d;
+  --good-line: #7fbf98;
+  --bad-bg: #f6dcdc;
+  --bad-fg: #7f1d1d;
+  --bad-line: #d98a8a;
+  --font-display: "Noto Serif Armenian", Georgia, "Times New Roman", serif;
+  --font-body: "Noto Sans Armenian", system-ui, -apple-system, "Segoe UI", sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #13151c;
+    --surface: #1b1e28;
+    --fg: #e9e8e4;
+    --muted: #9a9eae;
+    --line: #2f3342;
+    --accent: #e0788f;
+    --on-accent: #1a0c10;
+    --good-bg: #17382a;
+    --good-fg: #b6e6c8;
+    --good-line: #2f7a52;
+    --bad-bg: #44201f;
+    --bad-fg: #f3c3c3;
+    --bad-line: #8a3a3a;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #13151c;
+  --surface: #1b1e28;
+  --fg: #e9e8e4;
+  --muted: #9a9eae;
+  --line: #2f3342;
+  --accent: #e0788f;
+  --on-accent: #1a0c10;
+  --good-bg: #17382a;
+  --good-fg: #b6e6c8;
+  --good-line: #2f7a52;
+  --bad-bg: #44201f;
+  --bad-fg: #f3c3c3;
+  --bad-line: #8a3a3a;
+  color-scheme: dark;
+}
+html, body { min-height: 100%; }
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  padding-block: 28px 48px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+main { max-width: 560px; margin: 0 auto; }
+h1, h2 { font-family: var(--font-display); font-weight: 700; text-wrap: balance; margin: 0; line-height: 1.25; }
+.kicker { font-size: 12px; letter-spacing: 0.08em; color: var(--muted); margin: 0 0 8px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 22px 20px; }
+.start h1 { font-size: 32px; margin-bottom: 10px; }
+.start p { color: var(--muted); margin: 0 0 22px; }
+button { font: inherit; cursor: pointer; }
+button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.primary {
+  background: var(--accent); color: var(--on-accent); border: 0; border-radius: 10px;
+  padding: 13px 20px; font-weight: 600; width: 100%;
+}
+.meta { display: flex; justify-content: space-between; gap: 12px; font-size: 14px; color: var(--muted); margin-bottom: 10px; }
+.bar { height: 5px; background: var(--line); border-radius: 3px; margin-bottom: 22px; overflow: hidden; }
+.bar > span { display: block; height: 100%; background: var(--accent); transition: width 0.25s ease; }
+.q { font-size: 21px; margin-bottom: 18px; }
+.opts { display: grid; gap: 10px; }
+.opt {
+  display: flex; gap: 12px; align-items: baseline; text-align: left; width: 100%;
+  background: var(--bg); color: var(--fg); border: 1px solid var(--line); border-radius: 10px;
+  padding: 13px 14px; min-width: 0;
+}
+.opt .l { font-weight: 600; color: var(--muted); flex: none; }
+.opt .t { min-width: 0; overflow-wrap: anywhere; }
+.opt:hover:not(:disabled) { border-color: var(--accent); }
+.opt:disabled { cursor: default; }
+.opt.good { background: var(--good-bg); border-color: var(--good-line); color: var(--good-fg); }
+.opt.good .l { color: var(--good-fg); }
+.opt.bad { background: var(--bad-bg); border-color: var(--bad-line); color: var(--bad-fg); }
+.opt.bad .l { color: var(--bad-fg); }
+.fb { min-height: 26px; margin: 14px 0 12px; font-weight: 500; }
+.fb.good { color: var(--good-fg); }
+.fb.bad { color: var(--bad-fg); }
+.result { text-align: center; }
+.score { font-family: var(--font-display); font-size: 56px; font-weight: 700; line-height: 1.1; margin: 6px 0 4px; font-variant-numeric: tabular-nums; }
+.verdict { color: var(--muted); margin: 0 0 22px; }
+.missed { text-align: left; margin: 0 0 22px; padding: 0; list-style: none; display: grid; gap: 10px; }
+.missed li { border-top: 1px solid var(--line); padding-top: 10px; font-size: 15px; }
+.missed b { display: block; font-weight: 500; }
+.missed span { color: var(--good-fg); }
+.missed h2 { font-size: 16px; margin-bottom: 4px; }
+@media (prefers-reduced-motion: reduce) { .bar > span { transition: none; } }
+</style>
+
+</head>
+<body>
+<main id="app" aria-live="polite"></main>
+
+<script>
+var Q = [
+  { q: "Ե՞րբ է ծնվել Հ. Շիրազը", o: ["1915", "1914", "1903", "1911"], c: 1 },
+  { q: "Ո՞ր թվականին է Շիրազին տրամադրվել տուն Գյումրիում", o: ["1983", "1985", "1971", "1987"], c: 0 },
+  { q: "Ո՞ր ժանրով չի ստեղծագործել Շիրազը", o: ["Առակ", "Վեպ", "Պոեմ", "Քառյակ"], c: 1 },
+  { q: "Որն է Շիրազի առաջին ժողովածուն", o: ["Գարնանամուտ", "Սերմնացան"], c: 0 },
+  { q: "Ո՞վ է Շիրազի գրական անունը կնքել", o: ["Թումանյան", "Իսահակյան", "Ատրպետ", "Չարենց"], c: 2 },
+  { q: "Ո՞վ է Շիրազի երկրորդ կինը", o: ["Սիլվա", "Շուշանիկ", "Նվարդ", "Աշխեն"], c: 1 },
+  { q: "Ո՞ր թերթում է տպագրվել Շիրազի առաջին բանաստեղծությունը", o: ["Պիոների կանչ", "Մանագործ"], c: 1 },
+  { q: "Ո՞ր ստեղծագործությունից են հետևյալ տողերը՝ «Բայց ու՞ր էր մայրս դալուկ, Ախ, նա էլ էր որբացել...»", o: ["Գտա", "Մայրս փոքրիկ մայրս խեղճ"], c: 0 },
+  { q: "Որտե՞ղ է գտնվում Շիրազ քաղաքը", o: ["Իրան", "Հայաստան", "Չինաստան", "Սիրիա"], c: 0 },
+  { q: "Քանի՞ հատորից է բաղկացած «Քնար Հայաստանի» ժողովածուն", o: ["Երկու", "Երեք", "Չորս", "Մեկ"], c: 1 }
+];
+/* Option letters shown before each answer */
+var L = ["ա", "բ", "գ", "դ"];
+var i = 0, score = 0, locked = false, missed = [];
+var app = document.getElementById("app");
+
+function esc(s) {
+  return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+function start() {
+  app.innerHTML =
+    '<section class="card start">' +
+    '<p class="kicker">ՎԻԿՏՈՐԻՆԱ</p>' +
+    '<h1>Հովհաննես Շիրազ</h1>' +
+    '<p>10 հարց բանաստեղծի կյանքի և ստեղծագործության մասին։ Յուրաքանչյուր հարցի համար ընտրիր մեկ պատասխան։</p>' +
+    '<button class="primary" id="go">Սկսել</button>' +
+    '</section>';
+  document.getElementById("go").onclick = function () { i = 0; score = 0; missed = []; render(); };
+}
+
+function render() {
+  if (i >= Q.length) { finish(); return; }
+  locked = false;
+  var q = Q[i];
+  var h = '<section class="card">';
+  h += '<div class="meta"><span>Հարց ' + (i + 1) + ' / ' + Q.length + '</span><span>Միավոր՝ ' + score + '</span></div>';
+  h += '<div class="bar"><span style="width:' + Math.round(i / Q.length * 100) + '%"></span></div>';
+  h += '<h2 class="q">' + esc(q.q) + '</h2><div class="opts">';
+  for (var k = 0; k < q.o.length; k++) {
+    h += '<button class="opt" data-k="' + k + '"><span class="l">' + L[k] + ')</span><span class="t">' + esc(q.o[k]) + '</span></button>';
+  }
+  h += '</div><div class="fb" id="fb"></div>';
+  h += '<button class="primary" id="nx" hidden></button></section>';
+  app.innerHTML = h;
+  var b = app.querySelectorAll(".opt");
+  for (var j = 0; j < b.length; j++) {
+    b[j].onclick = function () { pick(parseInt(this.getAttribute("data-k"), 10)); };
+  }
+  document.getElementById("nx").onclick = function () { i++; render(); };
+}
+
+function pick(k) {
+  if (locked) return;
+  locked = true;
+  var q = Q[i];
+  var b = app.querySelectorAll(".opt");
+  var fb = document.getElementById("fb");
+  for (var j = 0; j < b.length; j++) b[j].disabled = true;
+  b[q.c].classList.add("good");
+  if (k === q.c) {
+    score++;
+    fb.className = "fb good";
+    fb.textContent = "Ճիշտ է";
+  } else {
+    b[k].classList.add("bad");
+    fb.className = "fb bad";
+    fb.textContent = "Սխալ է։ Ճիշտ պատասխանը՝ " + L[q.c] + ") " + q.o[q.c];
+    missed.push(i);
+  }
+  var nx = document.getElementById("nx");
+  nx.hidden = false;
+  nx.textContent = i === Q.length - 1 ? "Տեսնել արդյունքը" : "Հաջորդ հարցը";
+  nx.focus();
+}
+
+function finish() {
+  var v = score === Q.length ? "Բոլոր պատասխանները ճիշտ են։ Գերազանց է։"
+    : score >= 7 ? "Լավ արդյունք։ Շիրազին լավ գիտես։"
+    : score >= 5 ? "Միջին արդյունք։ Կարող ես ավելի լավ։"
+    : "Փորձիր նորից, կստացվի։";
+  var h = '<section class="card result"><p class="kicker">ԱՐԴՅՈՒՆՔ</p>';
+  h += '<div class="score">' + score + ' / ' + Q.length + '</div><p class="verdict">' + v + '</p>';
+  if (missed.length) {
+    h += '<ul class="missed"><li><h2>Սխալ պատասխաններ</h2></li>';
+    for (var m = 0; m < missed.length; m++) {
+      var q = Q[missed[m]];
+      h += '<li><b>' + esc(q.q) + '</b><span>Ճիշտ պատասխանը՝ ' + L[q.c] + ') ' + esc(q.o[q.c]) + '</span></li>';
+    }
+    h += '</ul>';
+  }
+  h += '<button class="primary" id="re">Խաղալ նորից</button></section>';
+  app.innerHTML = h;
+  document.getElementById("re").onclick = function () { i = 0; score = 0; missed = []; render(); };
+}
+
+start();
+</script>
+</body>
+</html>
